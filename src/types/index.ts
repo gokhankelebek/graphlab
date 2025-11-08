@@ -18,6 +18,7 @@ export interface AxisConfig {
   showMinorGrid: boolean;
   showNumbers: boolean;
   showAxisLabels: boolean;
+  showFrame: boolean;
   xLabel: string;
   yLabel: string;
 }

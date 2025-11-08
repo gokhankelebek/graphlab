@@ -12,6 +12,7 @@ const defaultAxisConfig: AxisConfig = {
   showMinorGrid: false,
   showNumbers: true,
   showAxisLabels: true,
+  showFrame: false,
   xLabel: 'x',
   yLabel: 'y',
 };

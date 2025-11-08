@@ -51,8 +51,21 @@ export class GraphEngine {
     return this.height - ((y - yMin) / (yMax - yMin)) * this.height;
   }
 
+  drawFrame(style: GraphStyle): void {
+    this.ctx.strokeStyle = style.axisColor;
+    this.ctx.lineWidth = 1.5;
+    this.ctx.setLineDash([]);
+    this.ctx.strokeRect(0, 0, this.width, this.height);
+  }
+
   drawGrid(axisConfig: AxisConfig, style: GraphStyle): void {
-    const { xMin, xMax, yMin, yMax, xStep, yStep, showGrid, showMinorGrid } = axisConfig;
+    const { xMin, xMax, yMin, yMax, xStep, yStep, showGrid, showMinorGrid, showFrame } = axisConfig;
+
+    // If frame mode is enabled, just draw the frame and skip grid
+    if (showFrame) {
+      this.drawFrame(style);
+      return;
+    }
 
     if (!showGrid) return;
 

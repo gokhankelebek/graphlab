@@ -73,11 +73,22 @@ export default function AxisControls() {
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
+            checked={axisConfig.showFrame}
+            onChange={(e) => updateAxisConfig({ showFrame: e.target.checked })}
+            className="rounded"
+          />
+          <span className="text-sm font-semibold">Frame Only (GraphFree Style)</span>
+        </label>
+
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
             checked={axisConfig.showGrid}
             onChange={(e) => updateAxisConfig({ showGrid: e.target.checked })}
             className="rounded"
+            disabled={axisConfig.showFrame}
           />
-          <span className="text-sm">Show Grid</span>
+          <span className={`text-sm ${axisConfig.showFrame ? 'text-gray-400' : ''}`}>Show Grid</span>
         </label>
 
         <label className="flex items-center gap-2">
@@ -86,8 +97,9 @@ export default function AxisControls() {
             checked={axisConfig.showMinorGrid}
             onChange={(e) => updateAxisConfig({ showMinorGrid: e.target.checked })}
             className="rounded"
+            disabled={axisConfig.showFrame}
           />
-          <span className="text-sm">Show Minor Grid</span>
+          <span className={`text-sm ${axisConfig.showFrame ? 'text-gray-400' : ''}`}>Show Minor Grid</span>
         </label>
 
         <label className="flex items-center gap-2">
