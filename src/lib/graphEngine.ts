@@ -131,7 +131,7 @@ export class GraphEngine {
         for (let x = Math.ceil(xMin / xStep) * xStep; x <= xMax; x += xStep) {
           if (Math.abs(x) > 0.001) {
             const canvasX = this.toCanvasX(x, axisConfig);
-            this.ctx.fillText(x.toFixed(1), canvasX, y + 5);
+            this.ctx.fillText(Math.round(x).toString(), canvasX, y + 5);
 
             // Tick marks
             this.ctx.beginPath();
@@ -175,7 +175,7 @@ export class GraphEngine {
         for (let y = Math.ceil(yMin / yStep) * yStep; y <= yMax; y += yStep) {
           if (Math.abs(y) > 0.001) {
             const canvasY = this.toCanvasY(y, axisConfig);
-            this.ctx.fillText(y.toFixed(1), x - 10, canvasY);
+            this.ctx.fillText(Math.round(y).toString(), x - 10, canvasY);
 
             // Tick marks
             this.ctx.beginPath();
