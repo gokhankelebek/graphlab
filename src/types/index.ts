@@ -38,12 +38,18 @@ export interface Point {
   label?: string;
 }
 
+export interface CanvasDimensions {
+  width: number;
+  height: number;
+}
+
 export interface GraphState {
   functions: GraphFunction[];
   axisConfig: AxisConfig;
   style: GraphStyle;
   points: Point[];
   title: string;
+  canvasDimensions: CanvasDimensions;
 }
 
 export type ExportFormat = 'png' | 'svg' | 'pdf';

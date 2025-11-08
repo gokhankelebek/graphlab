@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GraphState, GraphFunction, AxisConfig, GraphStyle, Point } from '../types';
+import { GraphState, GraphFunction, AxisConfig, GraphStyle, Point, CanvasDimensions } from '../types';
 
 const defaultAxisConfig: AxisConfig = {
   xMin: -10,
@@ -26,12 +26,18 @@ const defaultStyle: GraphStyle = {
   lineWidth: 2,
 };
 
+const defaultCanvasDimensions: CanvasDimensions = {
+  width: 400,
+  height: 400,
+};
+
 interface GraphStore extends GraphState {
   addFunction: (expression: string) => void;
   updateFunction: (id: string, updates: Partial<GraphFunction>) => void;
   removeFunction: (id: string) => void;
   updateAxisConfig: (updates: Partial<AxisConfig>) => void;
   updateStyle: (updates: Partial<GraphStyle>) => void;
+  updateCanvasDimensions: (dimensions: CanvasDimensions) => void;
   addPoint: (point: Point) => void;
   removePoint: (index: number) => void;
   setTitle: (title: string) => void;
@@ -45,6 +51,7 @@ const useGraphStore = create<GraphStore>((set) => ({
   style: defaultStyle,
   points: [],
   title: '',
+  canvasDimensions: defaultCanvasDimensions,
 
   addFunction: (expression: string) =>
     set((state) => ({
@@ -83,6 +90,9 @@ const useGraphStore = create<GraphStore>((set) => ({
       style: { ...state.style, ...updates },
     })),
 
+  updateCanvasDimensions: (dimensions: CanvasDimensions) =>
+    set({ canvasDimensions: dimensions }),
+
   addPoint: (point: Point) =>
     set((state) => ({
       points: [...state.points, point],
@@ -102,6 +112,7 @@ const useGraphStore = create<GraphStore>((set) => ({
       style: defaultStyle,
       points: [],
       title: '',
+      canvasDimensions: defaultCanvasDimensions,
     }),
 
   loadPreset: (config: Partial<GraphState>) =>

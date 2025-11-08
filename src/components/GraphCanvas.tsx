@@ -2,27 +2,22 @@ import { useEffect, useRef } from 'react';
 import { GraphEngine } from '../lib/graphEngine';
 import useGraphStore from '../store/graphStore';
 
-interface GraphCanvasProps {
-  width?: number;
-  height?: number;
-}
-
-export default function GraphCanvas({ width = 800, height = 600 }: GraphCanvasProps) {
+export default function GraphCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<GraphEngine | null>(null);
 
-  const { functions, axisConfig, style, points, title } = useGraphStore();
+  const { functions, axisConfig, style, points, title, canvasDimensions } = useGraphStore();
 
   // Initialize graph engine
   useEffect(() => {
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = canvasDimensions.width;
+    canvas.height = canvasDimensions.height;
 
     engineRef.current = new GraphEngine(canvas);
-  }, [width, height]);
+  }, [canvasDimensions.width, canvasDimensions.height]);
 
   // Render graph whenever state changes
   useEffect(() => {

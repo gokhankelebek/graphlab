@@ -7,15 +7,16 @@ function App() {
       <Sidebar />
       <div className="flex-1 p-8 overflow-auto">
         <div className="max-w-5xl mx-auto">
-          <GraphCanvas width={800} height={600} />
+          <GraphCanvas />
 
           <div className="mt-6 p-4 bg-white rounded-lg shadow-sm">
             <h2 className="text-lg font-semibold mb-2">Quick Start Guide</h2>
             <div className="space-y-2 text-sm text-gray-700">
               <p><strong>1. Add a function:</strong> Enter a mathematical expression (e.g., x^2, sin(x)) and click "Add"</p>
               <p><strong>2. Customize axes:</strong> Adjust the axis ranges and grid settings</p>
-              <p><strong>3. Use templates:</strong> Select from SAT, ACT, or AP exam-style presets</p>
-              <p><strong>4. Export:</strong> Download as PNG, SVG, or PDF for printing</p>
+              <p><strong>3. Adjust canvas size:</strong> Change plot dimensions (default 400×400 pixels)</p>
+              <p><strong>4. Use templates:</strong> Select from SAT, ACT, or AP exam-style presets</p>
+              <p><strong>5. Export:</strong> Download as PNG, SVG, or PDF for printing</p>
             </div>
           </div>
 

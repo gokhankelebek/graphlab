@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
 import FunctionInput from './FunctionInput';
 import AxisControls from './AxisControls';
+import CanvasSizeControls from './CanvasSizeControls';
 import ExportPanel from './ExportPanel';
 import PresetGallery from './PresetGallery';
 import useGraphStore from '../store/graphStore';
 
-type Section = 'functions' | 'axes' | 'presets' | 'export';
+type Section = 'functions' | 'axes' | 'canvas' | 'presets' | 'export';
 
 export default function Sidebar() {
   const [expandedSection, setExpandedSection] = useState<Section>('functions');
@@ -19,6 +20,7 @@ export default function Sidebar() {
   const sections: { id: Section; label: string; component: React.ReactNode }[] = [
     { id: 'functions', label: 'Functions', component: <FunctionInput /> },
     { id: 'axes', label: 'Axes & Grid', component: <AxisControls /> },
+    { id: 'canvas', label: 'Canvas Size', component: <CanvasSizeControls /> },
     { id: 'presets', label: 'Templates', component: <PresetGallery /> },
     { id: 'export', label: 'Export', component: <ExportPanel /> },
   ];
