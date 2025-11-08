@@ -25,6 +25,20 @@ export class GraphEngine {
     this.ctx.fillRect(0, 0, this.width, this.height);
   }
 
+  // Helper method to draw filled arrow
+  private drawArrow(x: number, y: number, angle: number, size: number = 10): void {
+    this.ctx.save();
+    this.ctx.translate(x, y);
+    this.ctx.rotate(angle);
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, 0);
+    this.ctx.lineTo(-size, -size / 2);
+    this.ctx.lineTo(-size, size / 2);
+    this.ctx.closePath();
+    this.ctx.fill();
+    this.ctx.restore();
+  }
+
   // Convert graph coordinates to canvas coordinates
   private toCanvasX(x: number, axisConfig: AxisConfig): number {
     const { xMin, xMax } = axisConfig;
@@ -115,12 +129,8 @@ export class GraphEngine {
       this.ctx.lineTo(this.width, y);
       this.ctx.stroke();
 
-      // X-axis arrow
-      this.ctx.beginPath();
-      this.ctx.moveTo(this.width - 10, y - 5);
-      this.ctx.lineTo(this.width, y);
-      this.ctx.lineTo(this.width - 10, y + 5);
-      this.ctx.stroke();
+      // X-axis arrow (filled triangle pointing right)
+      this.drawArrow(this.width, y, 0, 12);
 
       // X-axis numbers
       if (showNumbers) {
@@ -159,12 +169,8 @@ export class GraphEngine {
       this.ctx.lineTo(x, this.height);
       this.ctx.stroke();
 
-      // Y-axis arrow
-      this.ctx.beginPath();
-      this.ctx.moveTo(x - 5, 10);
-      this.ctx.lineTo(x, 0);
-      this.ctx.lineTo(x + 5, 10);
-      this.ctx.stroke();
+      // Y-axis arrow (filled triangle pointing up)
+      this.drawArrow(x, 0, -Math.PI / 2, 12);
 
       // Y-axis numbers
       if (showNumbers) {
@@ -214,6 +220,7 @@ export class GraphEngine {
     if (points.length === 0) return;
 
     this.ctx.strokeStyle = func.color;
+    this.ctx.fillStyle = func.color;
     this.ctx.lineWidth = func.lineWidth;
 
     // Set line style
@@ -228,6 +235,9 @@ export class GraphEngine {
         this.ctx.setLineDash([]);
     }
 
+    // Track visible points for arrow drawing
+    const visiblePoints: Array<{ x: number; y: number; canvasX: number; canvasY: number }> = [];
+
     this.ctx.beginPath();
     let isFirstPoint = true;
 
@@ -237,6 +247,8 @@ export class GraphEngine {
 
       // Only draw points within canvas bounds
       if (canvasY >= -100 && canvasY <= this.height + 100) {
+        visiblePoints.push({ x: point.x, y: point.y, canvasX, canvasY });
+
         if (isFirstPoint) {
           this.ctx.moveTo(canvasX, canvasY);
           isFirstPoint = false;
@@ -251,6 +263,27 @@ export class GraphEngine {
 
     this.ctx.stroke();
     this.ctx.setLineDash([]);
+
+    // Draw arrows at endpoints if we have enough points
+    if (visiblePoints.length >= 2) {
+      const arrowSize = 8;
+
+      // Arrow at start (left side)
+      const startIdx = 0;
+      const startNext = Math.min(5, visiblePoints.length - 1);
+      const dx1 = visiblePoints[startNext].canvasX - visiblePoints[startIdx].canvasX;
+      const dy1 = visiblePoints[startNext].canvasY - visiblePoints[startIdx].canvasY;
+      const angle1 = Math.atan2(dy1, dx1);
+      this.drawArrow(visiblePoints[startIdx].canvasX, visiblePoints[startIdx].canvasY, angle1 + Math.PI, arrowSize);
+
+      // Arrow at end (right side)
+      const endIdx = visiblePoints.length - 1;
+      const endPrev = Math.max(0, visiblePoints.length - 6);
+      const dx2 = visiblePoints[endIdx].canvasX - visiblePoints[endPrev].canvasX;
+      const dy2 = visiblePoints[endIdx].canvasY - visiblePoints[endPrev].canvasY;
+      const angle2 = Math.atan2(dy2, dx2);
+      this.drawArrow(visiblePoints[endIdx].canvasX, visiblePoints[endIdx].canvasY, angle2, arrowSize);
+    }
   }
 
   drawPoint(point: Point, axisConfig: AxisConfig, style: GraphStyle): void {
